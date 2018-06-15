@@ -25,6 +25,7 @@ class TableController extends Component {
     return (
       <div className="row">
         <div className='col-md-12'>
+          <span>Select data set: </span>
           <button onClick={this.setTableData1} className='btn btn-default'>Data Set 1</button>
           <button onClick={this.setTableData2} className='btn btn-default'>Data Set 2</button>
         </div>

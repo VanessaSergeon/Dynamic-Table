@@ -13,6 +13,7 @@ class Table extends Component {
     return (
       <thead>
         <tr>
+          <th>#</th>
           {headerData.map(function(d) {
             return <th key={d}>{d}</th>
           })}
@@ -40,6 +41,7 @@ class Table extends Component {
   TableBodyRow(rowData, index) {
     return (
       <tr key={index}>
+        <td>{index + 1}</td>
         {rowData.map(function(data) {
           return (
             <td key={data}>{data}</td>

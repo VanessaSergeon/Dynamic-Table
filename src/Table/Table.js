@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-// import table1 from './TestData.js';
-import {table1, table2} from './TestData.js';
-// import './App.css';
 
 class Table extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   getHeaderData() {
-    return table2[0];
+    return this.props.tableData[0];
   }
 
   TableHeader(headerData) {
@@ -25,8 +22,8 @@ class Table extends Component {
   }
 
   getTableBodyData() {
-    const bodyData = table2.slice(1);
-    console.log(bodyData)
+    const bodyData = this.props.tableData.slice(1);
+    // const bodyData = table2.slice(1);
     return bodyData;
   }
 

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-import logo from './logo.svg';
 import './App.css';
-import Table from './Table/Table.js';
+import TableController from './TableController/TableController.js';
 
 class App extends Component {
   render() {
@@ -10,8 +9,8 @@ class App extends Component {
       <div className="container">
       <h1>Genesis Homework Assignment</h1>
 
-      <div className="jumbotron">
-        <Table />
+      <div>
+        <TableController />
       </div>
 
     </div>

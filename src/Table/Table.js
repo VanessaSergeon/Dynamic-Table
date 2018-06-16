@@ -9,6 +9,8 @@ class Table extends Component {
       sortDirection: null, // asc or desc
       tableData: this.props.tableData.slice(1)
     };
+
+    this.sortAlgorithm = this.sortAlgorithm.bind(this);
   }
 
   getHeaderData() {
@@ -57,17 +59,20 @@ class Table extends Component {
       // else reset index and ordering
     if (this.state.sortedColumnIndex === columnIndex) {
       if (this.state.sortDirection === 'asc') {
-        this.setState({sortDirection: 'desc', tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
+        this.setState({sortDirection: 'desc'});
+        // this.setState({sortDirection: 'desc', tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
+        this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
       } else if (this.state.sortDirection === 'desc') {
-        this.setState({sortDirection: null, sortedColumnIndex: null});
+        this.setState({sortDirection: null, sortedColumnIndex: null, tableData: this.props.tableData.slice(1)});
       }
     }
 
     // if the column index is different
       // sort ascending and set the column index
     if (this.state.sortedColumnIndex !== columnIndex) {
-      this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex, tableData: this.state.tableData.sort(this.sortAlgorithm)});
-      // this.setState({sortedColumnIndex: columnIndex});
+      this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex});
+      this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm)});
+      // this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex, tableData: this.state.tableData.sort(this.sortAlgorithm)});
     }
 
     // console.log(this.state.sortDirection);
@@ -75,8 +80,8 @@ class Table extends Component {
   }
 
   sortAlgorithm(a, b) {
-    if (a[1] < b[1]) return -1;
-    if (a[1] > b[1]) return 1;
+    if (a[this.sortedColumnIndex] < b[this.sortedColumnIndex]) return -1;
+    if (a[this.sortedColumnIndex] > b[this.sortedColumnIndex]) return 1;
     return 0;
   }
 

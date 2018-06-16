@@ -52,31 +52,28 @@ class Table extends Component {
   }
 
   sortColumn(columnIndex) {
-//
-    console.log(columnIndex)
-    this.setState({sortedColumnIndex: columnIndex});
+    // console.log(columnIndex)
 
-    // if the colum index is the same
-      // sort direction is null
+    // if the column index is the same
       // sort direction is asc
-      // else
-
-    // if the colum index is different
-      // sort direction is null
-      // sort direction is asc
-      // else
-
-    if (this.state.sortDirection === null) {
-      this.setState({sortDirection: 'asc'});
-    } else if (this.state.sortDirection === 'asc') {
-      this.setState({sortDirection: 'desc'});
-    } else {
-      this.setState({sortDirection: null});
-      this.setState({sortedColumnIndex: null});
+      // else reset index and ordering
+    if (this.state.sortedColumnIndex === columnIndex) {
+      if (this.state.sortDirection === 'asc') {
+        this.setState({sortDirection: 'desc'});
+      } else if (this.state.sortDirection === 'desc') {
+        this.setState({sortDirection: null, sortedColumnIndex: null});
+      }
     }
 
-    console.log(this.state.sortDirection);
-    console.log(this.state.sortedColumnIndex);
+    // if the column index is different
+      // sort ascending and set the column index
+    if (this.state.sortedColumnIndex !== columnIndex) {
+      this.setState({sortDirection: 'asc'});
+      this.setState({sortedColumnIndex: columnIndex});
+    }
+
+    // console.log(this.state.sortDirection);
+    // console.log(this.state.sortedColumnIndex);
   }
 
   getTableBodyData() {

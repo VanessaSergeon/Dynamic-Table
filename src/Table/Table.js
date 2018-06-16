@@ -108,6 +108,10 @@ class Table extends Component {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ tableData: nextProps.tableData.slice(1) });
+  }
+
   render() {
     return (
       <div className="row">

@@ -5,7 +5,7 @@ var table1 = [
 ];
 
 var table2 = [
-	['column1', 'column2', 'column3'],
+	['set 2 column1', 'column2', 'column3'],
 	['data1', 2, 'three'],
 	['data1', 2, 'three'],
 	['data1', 2, 'three'],

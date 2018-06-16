@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 
 class Table extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      sortedColumnIndex: null, // number
+      sortDirection: null // asc or desc
+    };
+
+    // this.getSortButton = this.getSortButton.bind(this);
+    // this.sortColumn = this.sortColumn.bind(this);
+  }
 
   getHeaderData() {
     return this.props.tableData[0];
@@ -14,12 +22,61 @@ class Table extends Component {
       <thead>
         <tr>
           <th>#</th>
-          {headerData.map(function(d) {
-            return <th key={d}>{d}</th>
+          {headerData.map((d, columnIndex) => {
+            return (
+              <th key={d}>
+                {d}
+                {this.getSortButton(columnIndex)}
+              </th>
+            );
           })}
         </tr>
       </thead>
     );
+  }
+
+  getSortButton(columnIndex) {
+    if (this.state.sortedColumnIndex === columnIndex && this.state.sortDirection === 'asc') {
+      return (
+        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes pull-right" aria-hidden="true"></span>
+      );
+    } else if (this.state.sortedColumnIndex === columnIndex && this.state.sortDirection === 'desc') {
+      return (
+        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes-alt pull-right" aria-hidden="true"></span>
+      );
+    } else {
+      return (
+        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span>
+      );
+    }
+  }
+
+  sortColumn(columnIndex) {
+//
+    console.log(columnIndex)
+    this.setState({sortedColumnIndex: columnIndex});
+
+    // if the colum index is the same
+      // sort direction is null
+      // sort direction is asc
+      // else
+
+    // if the colum index is different
+      // sort direction is null
+      // sort direction is asc
+      // else
+
+    if (this.state.sortDirection === null) {
+      this.setState({sortDirection: 'asc'});
+    } else if (this.state.sortDirection === 'asc') {
+      this.setState({sortDirection: 'desc'});
+    } else {
+      this.setState({sortDirection: null});
+      this.setState({sortedColumnIndex: null});
+    }
+
+    console.log(this.state.sortDirection);
+    console.log(this.state.sortedColumnIndex);
   }
 
   getTableBodyData() {

@@ -1,7 +1,7 @@
 var table1 = [
 	['column1', 'column2', 'column3', 'column4'],
-	['data1', 2, 'three', 4],
-	['data1', 2, 'three', 4]
+	['data1', 3, 'two', 5],
+	['data2', 4, 'three', 48]
 ];
 
 var table2 = [

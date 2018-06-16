@@ -6,11 +6,9 @@ class Table extends Component {
 
     this.state = {
       sortedColumnIndex: null, // number
-      sortDirection: null // asc or desc
+      sortDirection: null, // asc or desc
+      tableData: this.props.tableData.slice(1)
     };
-
-    // this.getSortButton = this.getSortButton.bind(this);
-    // this.sortColumn = this.sortColumn.bind(this);
   }
 
   getHeaderData() {
@@ -59,7 +57,7 @@ class Table extends Component {
       // else reset index and ordering
     if (this.state.sortedColumnIndex === columnIndex) {
       if (this.state.sortDirection === 'asc') {
-        this.setState({sortDirection: 'desc'});
+        this.setState({sortDirection: 'desc', tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
       } else if (this.state.sortDirection === 'desc') {
         this.setState({sortDirection: null, sortedColumnIndex: null});
       }
@@ -68,17 +66,22 @@ class Table extends Component {
     // if the column index is different
       // sort ascending and set the column index
     if (this.state.sortedColumnIndex !== columnIndex) {
-      this.setState({sortDirection: 'asc'});
-      this.setState({sortedColumnIndex: columnIndex});
+      this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex, tableData: this.state.tableData.sort(this.sortAlgorithm)});
+      // this.setState({sortedColumnIndex: columnIndex});
     }
 
     // console.log(this.state.sortDirection);
     // console.log(this.state.sortedColumnIndex);
   }
 
+  sortAlgorithm(a, b) {
+    if (a[1] < b[1]) return -1;
+    if (a[1] > b[1]) return 1;
+    return 0;
+  }
+
   getTableBodyData() {
     const bodyData = this.props.tableData.slice(1);
-    // const bodyData = table2.slice(1);
     return bodyData;
   }
 
@@ -110,7 +113,7 @@ class Table extends Component {
       <div className="row">
         <table className='table table-bordered'>
           {this.TableHeader(this.getHeaderData())}
-          {this.TableBody(this.getTableBodyData())}
+          {this.TableBody(this.state.tableData)}
         </table>
       </div>
     );

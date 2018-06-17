@@ -19,7 +19,7 @@ class Table extends Component {
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
     this.updateInputValue = this.updateInputValue.bind(this);
-    this.testIfHighlightingByRefWorks = this.testIfHighlightingByRefWorks.bind(this);
+    // this.testIfHighlightingByRefWorks = this.testIfHighlightingByRefWorks.bind(this);
   }
 
   /**
@@ -30,11 +30,11 @@ class Table extends Component {
     return this.props.tableData[0];
   }
 
-  testIfHighlightingByRefWorks() {
-    const node = this.refs["coord1and1"]
-    console.log('node', node)
-    node.style.background = "red";
-  }
+  // testIfHighlightingByRefWorks() {
+  //   const node = this.refs["coord1and1"]
+  //   console.log('node', node)
+  //   node.style.background = "red";
+  // }
 
   /**
    * @param {array} headerData - array of the table columns.
@@ -126,24 +126,15 @@ class Table extends Component {
 
     console.log('listOfColumnCells', listOfColumnCells)
     console.log('filterMatches', filterMatches)
-
-    // this.refs[filterMatches][0].location.style.background = 'red';  // !!!!!!!!!!!!!
-    // this.refs.zeroxero.style.background = 'red';  // !!!!!!!!!!!!!
-
     this.highlightFilteredCells(filterMatches);
   }
 
   highlightFilteredCells(filterMatches) {
     for (var i = 0; i < filterMatches.length; i++) {
-      const cellRef = "coord" + filterMatches[i].location[0]+ "and" +filterMatches[i].location[1];
-      console.log('cellRef', cellRef);
-      console.log('filterMatches[i].location', filterMatches[i].location);
-      // const domNode = this.refs["0and0"];
+      // const cellRef = "coord" + filterMatches[i].location[0]+ "and" +filterMatches[i].location[1];
+      // const domNode = this.refs[filterMatches[i].location];
       const domNode = this.refs[filterMatches[i].location];
-      console.log('domNode', domNode);
-      // const domNode = this.refs[cellRef];
       domNode.style.background = 'red';
-      // this.refs[cellRef].style.background = 'red';
     }
   }
 
@@ -159,9 +150,6 @@ class Table extends Component {
       if (this.state.sortDirection === 'asc') {
         const reversedData = this.state.tableData.sort(this.sortAlgorithm).reverse();
         this.setState({sortDirection: 'desc', tableData: reversedData});
-
-        // this.setState({sortDirection: 'desc'});
-        // this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
       } else if (this.state.sortDirection === 'desc') {
         this.setState({sortDirection: null, sortedColumnIndex: null, tableData: this.props.tableData.slice(1)});
       }
@@ -221,7 +209,8 @@ class Table extends Component {
       <tr key={index}>
         <td>{index + 1}</td>
         {rowData.map(function(data, cellIndex) {
-          const cellLocation = `coord${index}and${cellIndex}`;
+          const cellLocation = `coord${cellIndex}and${index}`;
+          // const cellLocation = `coord${index}and${cellIndex}`;
           console.log('cellLocation', cellLocation)
           return (
             <td key={data} ref={cellLocation}>{data}</td>
@@ -239,9 +228,9 @@ class Table extends Component {
   }
 
   render() {
+        // <button onClick={this.testIfHighlightingByRefWorks}>Test refs</button>
     return (
       <div className="row">
-        <button onClick={this.testIfHighlightingByRefWorks}>Test refs</button>
         <table className='table table-bordered'>
           {this.TableHeader(this.getHeaderData())}
           {this.TableBody(this.state.tableData)}

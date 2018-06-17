@@ -118,7 +118,6 @@ class Table extends Component {
    * @param {string} filterType - type of filter to apply to column.
    */
   filterColumn(columnIndex, value, filterType) {
-    console.log('filter was chosen')
     let listOfColumnCells = [];
 
     for (var i = 0; i < this.state.tableData.length; i++) {
@@ -130,9 +129,6 @@ class Table extends Component {
     }
 
     const filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value)); // TODO: filtertype needs to be dynamic
-
-    console.log('listOfColumnCells', listOfColumnCells)
-    console.log('filterMatches', filterMatches)
     this.highlightFilteredCells(filterMatches);
   }
 
@@ -219,8 +215,6 @@ class Table extends Component {
         <td>{index + 1}</td>
         {rowData.map(function(data, cellIndex) {
           const cellLocation = `coord${cellIndex}and${index}`;
-          // const cellLocation = `coord${index}and${cellIndex}`;
-          console.log('cellLocation', cellLocation)
           return (
             <td key={data} ref={cellLocation}>{data}</td>
           );

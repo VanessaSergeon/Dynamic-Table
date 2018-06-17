@@ -1,3 +1,7 @@
+/**
+  * known shortcoming: inputs all update with same text/number value.
+ */ 
+
 import React, { Component } from 'react';
 
 class Table extends Component {
@@ -93,6 +97,22 @@ class Table extends Component {
           </div>
         </div>
       );
+    } else if (this.getColumnType(columnIndex) === 'number') {
+      return (
+        <div>
+          <input value={this.state.filterValue} onChange={this.updateInputValue} type="text" className="form-control" placeholder="Text"></input>
+          <div className="btn-group pull-right">
+            <button className="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Filter <span className="caret"></span>
+            </button>
+            <ul className="dropdown-menu">
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'equals')}>Equals</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'greater than')}>Greater than</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'less than')}>Less than</a></li>
+            </ul>
+          </div>
+        </div>
+      );
     } 
   }
 
@@ -112,7 +132,7 @@ class Table extends Component {
   }
 
   /**
-   * select cells to be filtered.
+   * select cells to be filtered based on filter type.
    * @param {number} columnIndex - column where filter should be applied.
    * @param {string | number} value - value to filter by.
    * @param {string} filterType - type of filter to apply to column.
@@ -128,7 +148,19 @@ class Table extends Component {
       listOfColumnCells.push({value: cellValue, location: cellLocation});
     }
 
-    const filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value)); // TODO: filtertype needs to be dynamic
+    let filterMatches;
+    // TODO: refactor into a switch statement.
+    if (filterType === "contains") {
+      filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value));
+    } else if (filterType === "matches") {
+      filterMatches = listOfColumnCells.filter(cell => cell.value === value);
+    } else if (filterType === "equals") {
+      filterMatches = listOfColumnCells.filter(cell => cell.value === value);
+    } else if (filterType === "greater than") {
+      filterMatches = listOfColumnCells.filter(cell => cell.value > value);
+    } else if (filterType === "less than") {
+      filterMatches = listOfColumnCells.filter(cell => cell.value < value);
+    }
     this.highlightFilteredCells(filterMatches);
   }
 

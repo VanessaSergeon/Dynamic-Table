@@ -8,3 +8,13 @@ it('renders without crashing', () => {
   ReactDOM.render(<Table tableData={table1}/>, div);
   ReactDOM.unmountComponentAtNode(div);
 });
+
+it('renders the table header', () => {});
+
+it('renders the table body', () => {});
+
+it('numbers the table body rows', () => {});
+
+it('sorts the table by column', () => {});
+
+it('changes sort direction', () => {});

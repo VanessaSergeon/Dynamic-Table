@@ -12,10 +12,14 @@ class Table extends Component {
     this.state = {
       sortedColumnIndex: null, // number
       sortDirection: null, // 'asc' or 'desc'
-      tableData: this.props.tableData.slice(1)
+      tableData: this.props.tableData.slice(1),
+      filters: {},
+      filterValue: undefined
     };
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
+    this.updateInputValue = this.updateInputValue.bind(this);
+    this.testIfHighlightingByRefWorks = this.testIfHighlightingByRefWorks.bind(this);
   }
 
   /**
@@ -24,6 +28,12 @@ class Table extends Component {
    */ 
   getHeaderData() {
     return this.props.tableData[0];
+  }
+
+  testIfHighlightingByRefWorks() {
+    const node = this.refs["coord1and1"]
+    console.log('node', node)
+    node.style.background = "red";
   }
 
   /**
@@ -39,6 +49,7 @@ class Table extends Component {
             return (
               <th key={d}>
                 {d}
+                {this.getFilterButton(columnIndex)}
                 {this.getSortButton(columnIndex)}
               </th>
             );
@@ -65,6 +76,74 @@ class Table extends Component {
       return (
         <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span>
       );
+    }
+  }
+
+  /**
+   * @param {number | null} columnIndexFilter - the column index that is currently being filtered by.
+   * @return - the html of the table header filter icon button.
+   */
+   getFilterButton(columnIndex) {
+    if (this.getColumnType(columnIndex) === 'string') {
+      return (
+        <div>
+          <input value={this.state.filterValue} onChange={this.updateInputValue} type="text" className="form-control" placeholder="Text"></input>
+          <div className="btn-group pull-right">
+            <button className="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Filter <span className="caret"></span>
+            </button>
+            <ul className="dropdown-menu">
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'matches')}>Matches</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'contains')}>Contains</a></li>
+            </ul>
+          </div>
+        </div>
+      );
+    } 
+  }
+
+  updateInputValue(e) {
+    this.setState({filterValue: e.target.value})
+  }
+
+  getColumnType(columnIndex) {
+    return typeof this.state.tableData[0][columnIndex];
+  }
+
+  filterColumn(columnIndex, value, filterType) {
+    console.log('filter was chosen')
+    let listOfColumnCells = [];
+
+    for (var i = 0; i < this.state.tableData.length; i++) {
+      let cellLocation = `coord${columnIndex}and${i}`;
+      // let cellLocation = [columnIndex, i];
+      let cellValue = this.state.tableData[i][columnIndex];
+
+      listOfColumnCells.push({value: cellValue, location: cellLocation});
+    }
+
+    const filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value)); // TODO: filtertype needs to be dynamic
+
+    console.log('listOfColumnCells', listOfColumnCells)
+    console.log('filterMatches', filterMatches)
+
+    // this.refs[filterMatches][0].location.style.background = 'red';  // !!!!!!!!!!!!!
+    // this.refs.zeroxero.style.background = 'red';  // !!!!!!!!!!!!!
+
+    this.highlightFilteredCells(filterMatches);
+  }
+
+  highlightFilteredCells(filterMatches) {
+    for (var i = 0; i < filterMatches.length; i++) {
+      const cellRef = "coord" + filterMatches[i].location[0]+ "and" +filterMatches[i].location[1];
+      console.log('cellRef', cellRef);
+      console.log('filterMatches[i].location', filterMatches[i].location);
+      // const domNode = this.refs["0and0"];
+      const domNode = this.refs[filterMatches[i].location];
+      console.log('domNode', domNode);
+      // const domNode = this.refs[cellRef];
+      domNode.style.background = 'red';
+      // this.refs[cellRef].style.background = 'red';
     }
   }
 
@@ -141,9 +220,11 @@ class Table extends Component {
     return (
       <tr key={index}>
         <td>{index + 1}</td>
-        {rowData.map(function(data) {
+        {rowData.map(function(data, cellIndex) {
+          const cellLocation = `coord${index}and${cellIndex}`;
+          console.log('cellLocation', cellLocation)
           return (
-            <td key={data}>{data}</td>
+            <td key={data} ref={cellLocation}>{data}</td>
           );
         })}
       </tr>
@@ -160,6 +241,7 @@ class Table extends Component {
   render() {
     return (
       <div className="row">
+        <button onClick={this.testIfHighlightingByRefWorks}>Test refs</button>
         <table className='table table-bordered'>
           {this.TableHeader(this.getHeaderData())}
           {this.TableBody(this.state.tableData)}

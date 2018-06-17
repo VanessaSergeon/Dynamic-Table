@@ -7,3 +7,5 @@ it('renders without crashing', () => {
   ReactDOM.render(<TableController />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
+
+it('toggles between data sets', () => {});

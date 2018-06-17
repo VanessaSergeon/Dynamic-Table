@@ -30,12 +30,6 @@ class Table extends Component {
     return this.props.tableData[0];
   }
 
-  // testIfHighlightingByRefWorks() {
-  //   const node = this.refs["coord1and1"]
-  //   console.log('node', node)
-  //   node.style.background = "red";
-  // }
-
   /**
    * @param {array} headerData - array of the table columns.
    * @return - the html of the table header.
@@ -102,14 +96,27 @@ class Table extends Component {
     } 
   }
 
+  /**
+   * @param {event} e - event when input changes.
+   */
   updateInputValue(e) {
     this.setState({filterValue: e.target.value})
   }
 
+  /**
+   * @param {number} columnIndex - column where filter should be applied.
+   * @return {string} - value type.
+   */
   getColumnType(columnIndex) {
     return typeof this.state.tableData[0][columnIndex];
   }
 
+  /**
+   * select cells to be filtered.
+   * @param {number} columnIndex - column where filter should be applied.
+   * @param {string | number} value - value to filter by.
+   * @param {string} filterType - type of filter to apply to column.
+   */
   filterColumn(columnIndex, value, filterType) {
     console.log('filter was chosen')
     let listOfColumnCells = [];
@@ -129,12 +136,14 @@ class Table extends Component {
     this.highlightFilteredCells(filterMatches);
   }
 
+  /**
+   * highlight cells by their ref coordinates.
+   * @param {array} filterMatches - array of cells to be highlighted.
+   */
   highlightFilteredCells(filterMatches) {
     for (var i = 0; i < filterMatches.length; i++) {
-      // const cellRef = "coord" + filterMatches[i].location[0]+ "and" +filterMatches[i].location[1];
-      // const domNode = this.refs[filterMatches[i].location];
       const domNode = this.refs[filterMatches[i].location];
-      domNode.style.background = 'red';
+      domNode.style.background = 'blue';
     }
   }
 
@@ -228,7 +237,6 @@ class Table extends Component {
   }
 
   render() {
-        // <button onClick={this.testIfHighlightingByRefWorks}>Test refs</button>
     return (
       <div className="row">
         <table className='table table-bordered'>

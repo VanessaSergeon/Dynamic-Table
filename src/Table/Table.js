@@ -138,6 +138,8 @@ class Table extends Component {
    * @param {string} filterType - type of filter to apply to column.
    */
   filterColumn(columnIndex, value, filterType) {
+    if (value === undefined) {alert("Please enter a value to filter by.")}
+
     let listOfColumnCells = [];
 
     for (var i = 0; i < this.state.tableData.length; i++) {

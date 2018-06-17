@@ -54,14 +54,38 @@ class Table extends Component {
   sortColumn(columnIndex) {
     // console.log(columnIndex)
 
+    // this.setState({sortedColumnIndex: columnIndex}, (columnIndex) => {
+    //   console.log('the function within the setState of the index happened')
+    //   // if the column index is the same
+    //     // sort direction is asc
+    //     // else reset index and ordering
+    //   if (this.state.sortedColumnIndex === columnIndex) {
+    //     if (this.state.sortDirection === 'asc') {
+    //       const reversedData = this.state.tableData.sort(this.sortAlgorithm).reverse();
+    //       this.setState({sortDirection: 'desc', tableData: reversedData});
+    //     } else if (this.state.sortDirection === 'desc') {
+    //       this.setState({sortDirection: null, sortedColumnIndex: null, tableData: this.props.tableData.slice(1)});
+    //     }
+    //   }
+
+    //   // if the column index is different
+    //     // sort ascending and set the column index
+    //   if (this.state.sortedColumnIndex !== columnIndex) {
+    //     this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex});
+    //     this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm)});
+    //   }
+    // });
+
     // if the column index is the same
       // sort direction is asc
       // else reset index and ordering
     if (this.state.sortedColumnIndex === columnIndex) {
       if (this.state.sortDirection === 'asc') {
-        this.setState({sortDirection: 'desc'});
-        // this.setState({sortDirection: 'desc', tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
-        this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
+        const reversedData = this.state.tableData.sort(this.sortAlgorithm).reverse();
+        this.setState({sortDirection: 'desc', tableData: reversedData});
+
+        // this.setState({sortDirection: 'desc'});
+        // this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm).reverse()});
       } else if (this.state.sortDirection === 'desc') {
         this.setState({sortDirection: null, sortedColumnIndex: null, tableData: this.props.tableData.slice(1)});
       }
@@ -70,9 +94,13 @@ class Table extends Component {
     // if the column index is different
       // sort ascending and set the column index
     if (this.state.sortedColumnIndex !== columnIndex) {
-      this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex});
-      this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm)});
-      // this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex, tableData: this.state.tableData.sort(this.sortAlgorithm)});
+      this.setState({sortedColumnIndex: columnIndex}, () => {
+        const sortedData = this.state.tableData.sort(this.sortAlgorithm);
+        this.setState({sortDirection: 'asc', tableData: sortedData});
+      })
+
+      // this.setState({sortDirection: 'asc', sortedColumnIndex: columnIndex});
+      // this.setState({tableData: this.state.tableData.sort(this.sortAlgorithm)});
     }
 
     // console.log(this.state.sortDirection);
@@ -80,8 +108,9 @@ class Table extends Component {
   }
 
   sortAlgorithm(a, b) {
-    if (a[this.sortedColumnIndex] < b[this.sortedColumnIndex]) return -1;
-    if (a[this.sortedColumnIndex] > b[this.sortedColumnIndex]) return 1;
+    console.log('the index when sorting happens', this.state.sortedColumnIndex);
+    if (a[this.state.sortedColumnIndex] < b[this.state.sortedColumnIndex]) return -1;
+    if (a[this.state.sortedColumnIndex] > b[this.state.sortedColumnIndex]) return 1;
     return 0;
   }
 

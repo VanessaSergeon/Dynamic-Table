@@ -17,7 +17,7 @@ class Table extends Component {
       sortedColumnIndex: null, // number
       sortDirection: null, // 'asc' or 'desc'
       tableData: this.props.tableData.slice(1),
-      filters: {},
+      filters: [],
       filterValue: undefined
     };
 
@@ -138,6 +138,12 @@ class Table extends Component {
    * @param {string} filterType - type of filter to apply to column.
    */
   filterColumn(columnIndex, value, filterType) {
+    const filterConfig = {'columnIndex': columnIndex, 'value': value, 'filterType': filterType};
+    const newFilterState = this.state.filters;
+    newFilterState.push(filterConfig);
+    this.setState({filters: newFilterState});
+
+
     if (value === undefined) {alert("Please enter a value to filter by.")}
 
     let listOfColumnCells = [];

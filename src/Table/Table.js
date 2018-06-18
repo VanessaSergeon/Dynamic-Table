@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react';
 
+import './Table.css';
+
 class Table extends Component {
   /**
    * this constructor sets the initial state of the Table componenet
@@ -23,6 +25,8 @@ class Table extends Component {
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
     this.updateInputValue = this.updateInputValue.bind(this);
+    this.showCellInfo = this.showCellInfo.bind(this);
+    this.hideCellInfo = this.hideCellInfo.bind(this);
   }
 
   /**
@@ -263,14 +267,45 @@ class Table extends Component {
     return (
       <tr key={index}>
         <td>{index + 1}</td>
-        {rowData.map(function(data, cellIndex) {
+        {rowData.map((data, cellIndex) => {
           const cellLocation = `coord${cellIndex}and${index}`;
+          const popoverLocation = `${cellLocation}info`;
           return (
-            <td key={data} ref={cellLocation}>{data}</td>
+            <td key={data} ref={cellLocation}>
+              <div
+                onMouseEnter={() => this.showCellInfo(popoverLocation)}
+                onMouseLeave={() => this.hideCellInfo(popoverLocation)}>
+                {data}
+                {this.cellInfo(popoverLocation, index)}
+              </div>
+            </td>
           );
         })}
       </tr>
     );
+              // <div className="cell-info" ref={popoverLocation}>this will be a popover</div>
+  }
+
+  cellInfo(popoverLocation, rowIndex) {
+    return (
+      <div ref={popoverLocation} className="cell-info">
+        Row of cell is: {rowIndex + 1}
+      </div>
+    );
+  }
+
+  showCellInfo(popoverLocation) {
+    console.log('show', popoverLocation);
+
+    const domNode = this.refs[popoverLocation];
+    domNode.style.visibility = 'visible';
+  }
+
+  hideCellInfo(popoverLocation) {
+    console.log('hide', popoverLocation);
+
+    const domNode = this.refs[popoverLocation];
+    domNode.style.visibility = 'hidden';
   }
 
   /**

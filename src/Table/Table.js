@@ -1,7 +1,3 @@
-/**
-  * known shortcoming: inputs all update with same text/number value.
- */ 
-
 import React, { Component } from 'react';
 
 import './Table.css';
@@ -15,12 +11,17 @@ class Table extends Component {
   constructor(props) {
     super(props);
 
+    let filterValues = {};
+    for (var i = 0; i < props.tableData.length; i++) {
+      filterValues[i] = undefined;
+    }
+
     this.state = {
       sortedColumnIndex: null, // number
       sortDirection: null, // 'asc' or 'desc'
       tableData: this.props.tableData.slice(1),
       filters: [],
-      filterValue: undefined
+      filterValue: filterValues
     };
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
@@ -88,14 +89,14 @@ class Table extends Component {
     if (this.getColumnType(columnIndex) === 'string') {
       return (
         <div className="form-inline">
-          <input value={this.state.filterValue} onChange={this.updateInputValue} type="text" className="form-control" placeholder="Text"></input>
+          <input value={this.state.filterValue[columnIndex]} onChange={(e) => this.updateInputValue(columnIndex, e)} type="text" className="form-control" placeholder="Text"></input>
           <div className="btn-group pull-right">
             <button className="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter <span className="caret"></span>
             </button>
             <ul className="dropdown-menu">
-              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'matches')}>Matches</a></li>
-              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'contains')}>Contains</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue[columnIndex], 'matches')}>Matches</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue[columnIndex], 'contains')}>Contains</a></li>
             </ul>
           </div>
         </div>
@@ -103,15 +104,15 @@ class Table extends Component {
     } else if (this.getColumnType(columnIndex) === 'number') {
       return (
         <div>
-          <input value={this.state.filterValue} onChange={this.updateInputValue} type="text" className="form-control" placeholder="Text"></input>
+          <input value={this.state.filterValue[columnIndex]} onChange={(e) => this.updateInputValue(columnIndex, e)} type="text" className="form-control" placeholder="Text"></input>
           <div className="btn-group pull-right">
             <button className="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter <span className="caret"></span>
             </button>
             <ul className="dropdown-menu">
-              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'equals')}>Equals</a></li>
-              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'greater than')}>Greater than</a></li>
-              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue, 'less than')}>Less than</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue[columnIndex], 'equals')}>Equals</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue[columnIndex], 'greater than')}>Greater than</a></li>
+              <li><a onClick={() => this.filterColumn(columnIndex, this.state.filterValue[columnIndex], 'less than')}>Less than</a></li>
             </ul>
           </div>
         </div>
@@ -120,10 +121,13 @@ class Table extends Component {
   }
 
   /**
+   * @param {number} columnIndex - the index of the column filter data is being entered into.
    * @param {event} e - event when input changes.
    */
-  updateInputValue(e) {
-    this.setState({filterValue: e.target.value})
+  updateInputValue(columnIndex, e) {
+    const newFilterState = this.state.filterValue;
+    newFilterState[columnIndex] = e.target.value
+    this.setState(newFilterState)
   }
 
   /**

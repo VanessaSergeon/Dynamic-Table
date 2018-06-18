@@ -46,10 +46,10 @@ class Table extends Component {
       <thead>
         <tr>
           <th>#</th>
-          {headerData.map((d, columnIndex) => {
+          {headerData.map((columnName, columnIndex) => {
             return (
-              <th key={d}>
-                {d}
+              <th key={columnName}>
+                {columnName}
                 {this.getFilterButton(columnIndex)}
                 {this.getSortButton(columnIndex)}
               </th>
@@ -67,15 +67,15 @@ class Table extends Component {
   getSortButton(columnIndex) {
     if (this.state.sortedColumnIndex === columnIndex && this.state.sortDirection === 'asc') {
       return (
-        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes pull-right" aria-hidden="true"></span>
+        <div><span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes pull-right" aria-hidden="true"></span></div>
       );
     } else if (this.state.sortedColumnIndex === columnIndex && this.state.sortDirection === 'desc') {
       return (
-        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes-alt pull-right" aria-hidden="true"></span>
+        <div><span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort-by-attributes-alt pull-right" aria-hidden="true"></span></div>
       );
     } else {
       return (
-        <span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span>
+        <div><span onClick={() => this.sortColumn(columnIndex)} className="glyphicon glyphicon-sort pull-right" aria-hidden="true"></span></div>
       );
     }
   }
@@ -87,7 +87,7 @@ class Table extends Component {
    getFilterButton(columnIndex) {
     if (this.getColumnType(columnIndex) === 'string') {
       return (
-        <div>
+        <div className="form-inline">
           <input value={this.state.filterValue} onChange={this.updateInputValue} type="text" className="form-control" placeholder="Text"></input>
           <div className="btn-group pull-right">
             <button className="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

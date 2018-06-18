@@ -25,9 +25,6 @@ class Table extends Component {
     };
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
-    this.updateInputValue = this.updateInputValue.bind(this);
-    this.showCellInfo = this.showCellInfo.bind(this);
-    this.hideCellInfo = this.hideCellInfo.bind(this);
   }
 
   /**
@@ -145,38 +142,40 @@ class Table extends Component {
    * @param {string} filterType - type of filter to apply to column.
    */
   filterColumn(columnIndex, value, filterType) {
-    if (value === undefined) {alert("Please enter a value to filter by.")}
+    if (value === undefined) {
+      alert("Please enter a value to filter by.")
+    } else {
+      let listOfColumnCells = [];
 
-    let listOfColumnCells = [];
+      for (var i = 0; i < this.state.tableData.length; i++) {
+        let cellLocation = `coord${columnIndex}and${i}`;
+        // let cellLocation = [columnIndex, i];
+        let cellValue = this.state.tableData[i][columnIndex];
 
-    for (var i = 0; i < this.state.tableData.length; i++) {
-      let cellLocation = `coord${columnIndex}and${i}`;
-      // let cellLocation = [columnIndex, i];
-      let cellValue = this.state.tableData[i][columnIndex];
+        listOfColumnCells.push({value: cellValue, location: cellLocation});
+      }
 
-      listOfColumnCells.push({value: cellValue, location: cellLocation});
+      let filterMatches;
+      // TODO: refactor into a switch statement.
+      if (filterType === "contains") {
+        filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value));
+      } else if (filterType === "matches") {
+        filterMatches = listOfColumnCells.filter(cell => cell.value === value);
+      } else if (filterType === "equals") {
+        filterMatches = listOfColumnCells.filter(cell => cell.value == value);
+      } else if (filterType === "greater than") {
+        filterMatches = listOfColumnCells.filter(cell => cell.value > value);
+      } else if (filterType === "less than") {
+        filterMatches = listOfColumnCells.filter(cell => cell.value < value);
+      }
+
+      const filterConfig = {'columnIndex': columnIndex, 'value': value, 'filterType': filterType, 'filterMatches': filterMatches};
+      const newFilterState = this.state.filters;
+      newFilterState.push(filterConfig);
+      this.setState({filters: newFilterState});
+
+      this.highlightFilteredCells(filterMatches);
     }
-
-    let filterMatches;
-    // TODO: refactor into a switch statement.
-    if (filterType === "contains") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value.includes(value));
-    } else if (filterType === "matches") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value === value);
-    } else if (filterType === "equals") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value == value);
-    } else if (filterType === "greater than") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value > value);
-    } else if (filterType === "less than") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value < value);
-    }
-
-    const filterConfig = {'columnIndex': columnIndex, 'value': value, 'filterType': filterType, 'filterMatches': filterMatches};
-    const newFilterState = this.state.filters;
-    newFilterState.push(filterConfig);
-    this.setState({filters: newFilterState});
-
-    this.highlightFilteredCells(filterMatches);
   }
 
   /**

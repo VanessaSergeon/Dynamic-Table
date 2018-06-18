@@ -283,7 +283,6 @@ class Table extends Component {
         })}
       </tr>
     );
-              // <div className="cell-info" ref={popoverLocation}>this will be a popover</div>
   }
 
   cellInfo(popoverLocation, rowIndex) {
@@ -295,15 +294,11 @@ class Table extends Component {
   }
 
   showCellInfo(popoverLocation) {
-    console.log('show', popoverLocation);
-
     const domNode = this.refs[popoverLocation];
     domNode.style.visibility = 'visible';
   }
 
   hideCellInfo(popoverLocation) {
-    console.log('hide', popoverLocation);
-
     const domNode = this.refs[popoverLocation];
     domNode.style.visibility = 'hidden';
   }

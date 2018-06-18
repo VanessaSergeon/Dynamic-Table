@@ -23,7 +23,6 @@ class Table extends Component {
 
     this.sortAlgorithm = this.sortAlgorithm.bind(this);
     this.updateInputValue = this.updateInputValue.bind(this);
-    // this.testIfHighlightingByRefWorks = this.testIfHighlightingByRefWorks.bind(this);
   }
 
   /**
@@ -138,12 +137,6 @@ class Table extends Component {
    * @param {string} filterType - type of filter to apply to column.
    */
   filterColumn(columnIndex, value, filterType) {
-    const filterConfig = {'columnIndex': columnIndex, 'value': value, 'filterType': filterType};
-    const newFilterState = this.state.filters;
-    newFilterState.push(filterConfig);
-    this.setState({filters: newFilterState});
-
-
     if (value === undefined) {alert("Please enter a value to filter by.")}
 
     let listOfColumnCells = [];
@@ -163,12 +156,18 @@ class Table extends Component {
     } else if (filterType === "matches") {
       filterMatches = listOfColumnCells.filter(cell => cell.value === value);
     } else if (filterType === "equals") {
-      filterMatches = listOfColumnCells.filter(cell => cell.value === value);
+      filterMatches = listOfColumnCells.filter(cell => cell.value == value);
     } else if (filterType === "greater than") {
       filterMatches = listOfColumnCells.filter(cell => cell.value > value);
     } else if (filterType === "less than") {
       filterMatches = listOfColumnCells.filter(cell => cell.value < value);
     }
+
+    const filterConfig = {'columnIndex': columnIndex, 'value': value, 'filterType': filterType, 'filterMatches': filterMatches};
+    const newFilterState = this.state.filters;
+    newFilterState.push(filterConfig);
+    this.setState({filters: newFilterState});
+
     this.highlightFilteredCells(filterMatches);
   }
 
@@ -180,6 +179,17 @@ class Table extends Component {
     for (var i = 0; i < filterMatches.length; i++) {
       const domNode = this.refs[filterMatches[i].location];
       domNode.style.background = 'blue';
+    }
+  }
+
+  /**
+   * unHighlight cells by their ref coordinates.
+   * @param {array} filterMatches - array of cells to be highlighted.
+   */
+  unHighlightFilteredCells(filterMatches) {
+    for (var i = 0; i < filterMatches.length; i++) {
+      const domNode = this.refs[filterMatches[i].location];
+      domNode.style.background = 'none';
     }
   }
 
@@ -263,6 +273,32 @@ class Table extends Component {
     );
   }
 
+  listOfFilters() {
+    if (this.state.filters.length) {
+      return (
+        <div>
+          <p>Remove filter</p>
+          <div className="list-group">
+            {this.state.filters.map((filter, filterIndex) => {
+              return (
+                <button onClick={() => {this.removeFilter(filterIndex)}} key={filter.value} type="button" className="list-group-item">
+                  {filter.columnIndex} - {filter.value} - {filter.filterType}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  }
+
+  removeFilter(filterIndex) {
+    this.unHighlightFilteredCells(this.state.filters[filterIndex].filterMatches);
+    const newFilerList = this.state.filters;
+    newFilerList.splice(filterIndex, 1);
+    this.setState({filters: newFilerList});
+  }
+
   /**
    * render the componenent when new props are recieved and set the state.
    */
@@ -273,6 +309,7 @@ class Table extends Component {
   render() {
     return (
       <div className="row">
+        {this.listOfFilters()}
         <table className='table table-bordered'>
           {this.TableHeader(this.getHeaderData())}
           {this.TableBody(this.state.tableData)}

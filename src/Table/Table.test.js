@@ -15,6 +15,10 @@ it('renders the table body', () => {});
 
 it('numbers the table body rows', () => {});
 
-it('sorts the table by column', () => {});
+it('sorts the table by column, asc', () => {});
 
-it('changes sort direction', () => {});
+it('sorts the table by column, desc', () => {});
+
+it('filter column by configured paramaters', () => {});
+
+it('remove column filter', () => {});

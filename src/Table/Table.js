@@ -273,6 +273,9 @@ class Table extends Component {
     );
   }
 
+  /**
+   * @return - html list of applied filters
+   */
   listOfFilters() {
     if (this.state.filters.length) {
       return (
@@ -282,7 +285,7 @@ class Table extends Component {
             {this.state.filters.map((filter, filterIndex) => {
               return (
                 <button onClick={() => {this.removeFilter(filterIndex)}} key={filter.value} type="button" className="list-group-item">
-                  {filter.columnIndex} - {filter.value} - {filter.filterType}
+                  Column Index: {filter.columnIndex} - Filter Value: {filter.value} - Filter Type: {filter.filterType}
                 </button>
               );
             })}
@@ -292,6 +295,9 @@ class Table extends Component {
     }
   }
 
+  /**
+   * remove a filter.
+   */
   removeFilter(filterIndex) {
     this.unHighlightFilteredCells(this.state.filters[filterIndex].filterMatches);
     const newFilerList = this.state.filters;
